@@ -8,10 +8,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  // Vercel Postgres / Neon integration sets these automatically.
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
