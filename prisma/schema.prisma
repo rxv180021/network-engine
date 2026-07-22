@@ -1,0 +1,139 @@
+// Network Engine — data model
+// The Verified Referral Graph + Outcome Ledger.
+// SQLite (no enums / native arrays): enum-like fields are validated in the app layer;
+// list fields are stored comma-separated.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  role          String    @default("MEMBER") // MEMBER | ADMIN
+  tier          String    @default("SILVER") // SILVER | GOLD
+  title         String?
+  company       String?
+  industry      String?
+  linkedinUrl   String?
+  refersFor     String    @default("") // comma-separated role names
+  referralScore Int       @default(500)
+  credits       Int       @default(1)
+  goldSince     DateTime?
+  avatarColor   String    @default("#E3B25A")
+  createdAt     DateTime  @default(now())
+
+  applications   Application[]
+  requestsMade   Referral[]    @relation("requester")
+  referralsGiven Referral[]    @relation("insider")
+  outcomes       Outcome[]
+  offers         Offer[]
+  creditEntries  CreditEntry[]
+  signals        Signal[]
+}
+
+model Application {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  company     String
+  role        String
+  industry    String
+  refersFor   String
+  linkedinUrl String?
+  proofName   String? // stored filename of the redacted proof (demo keeps the name, not the file)
+  status      String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  createdAt   DateTime  @default(now())
+  reviewedAt  DateTime?
+}
+
+model Referral {
+  id          String   @id @default(cuid())
+  requesterId String
+  requester   User     @relation("requester", fields: [requesterId], references: [id])
+  insiderId   String
+  insider     User     @relation("insider", fields: [insiderId], references: [id])
+  role        String
+  company     String
+  stage       String   @default("REFERRED") // REFERRED | INTERVIEWING | OFFER | HIRED | DECLINED
+  status      String   @default("PENDING_CONFIRM") // PENDING_CONFIRM | VERIFIED | OUTCOME
+  matchScore  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  intro       IntroDraft?
+}
+
+// An opt-in "predictive need" signal on a member (open-to-work, tenure, layoff).
+model Signal {
+  id        String   @id @default(cuid())
+  memberId  String
+  member    User     @relation(fields: [memberId], references: [id])
+  kind      String   // open | tenure | layoff
+  detail    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// The AI-drafted warm intro, held for human approval (never auto-sent).
+model IntroDraft {
+  id         String   @id @default(cuid())
+  referralId String   @unique
+  referral   Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  body       String
+  grounded   Boolean  @default(true) // false => "needs a person", under-grounded
+  source     String   @default("ai") // ai | mock | human
+  status     String   @default("HELD") // HELD | APPROVED | SENT
+  createdAt  DateTime @default(now())
+}
+
+model Outcome {
+  id          String   @id @default(cuid())
+  memberId    String
+  member      User     @relation(fields: [memberId], references: [id])
+  type        String // JOB | PROMOTION | CLIENT | FOUNDER | CAPITAL | CREDENTIAL
+  who         String
+  rawValue    Float
+  attribution Int // percent 0-100
+  verified    Boolean  @default(true)
+  note        String?
+  createdAt   DateTime @default(now())
+}
+
+model Offer {
+  id        String   @id @default(cuid())
+  insiderId String
+  insider   User     @relation(fields: [insiderId], references: [id])
+  company   String
+  role      String
+  slots     Int      @default(1)
+  createdAt DateTime @default(now())
+}
+
+model CreditEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  delta     Int
+  reason    String
+  createdAt DateTime @default(now())
+}
+
+// Sponsor Impact Dashboard metrics. Real values entered manually or via CSV import;
+// `source` records provenance so the UI never presents an unknown number as real.
+model Metric {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  label     String
+  value     String   @default("")
+  period    String?
+  source    String   @default("manual") // real | connect | manual | csv
+  updatedAt DateTime @updatedAt
+}
