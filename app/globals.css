@@ -4,24 +4,24 @@
    Network Engine — design system (dark "stage" identity)
    ============================================================ */
 :root {
-  --ink: #0d1014;
-  --ink-2: #141922;
-  --ink-3: #1b212c;
-  --line: #29313f;
-  --line-2: #3a4453;
+  --ink: #0f1220;
+  --ink-2: #191d30;
+  --ink-3: #20263d;
+  --line: #2c3350;
+  --line-2: #3d4668;
   --fg: #eceef3;
   --fg-soft: #c3c9d4;
   --muted: #838c9c;
-  --gold: #e3b25a;
-  --gold-hi: #f1c877;
-  --gold-dim: rgba(227, 178, 90, 0.14);
+  --gold: #8b7cf6;
+  --gold-hi: #a99cff;
+  --gold-dim: rgba(139, 124, 246, 0.14);
   --silver: #aeb7c4;
   --verify: #5cc08c;
   --verify-dim: rgba(92, 192, 140, 0.13);
   --ghost: #6b7382;
   --danger: #e06a6a;
   --danger-dim: rgba(224, 106, 106, 0.12);
-  --track: #232a36;
+  --track: #262d45;
 
   --font-display: ui-serif, "New York", Georgia, "Times New Roman", serif;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
@@ -85,7 +85,7 @@ h2.head { font-family: var(--font-display); font-weight: 500; font-size: clamp(1
 .page-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.7rem, 3.4vw, 2.4rem); letter-spacing: -0.01em; margin: 0 0 0.3rem; }
 
 /* buttons */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem; border-radius: 10px; padding: 0.62rem 1.15rem; border: 1px solid var(--gold); background: var(--gold); color: #0d1014; cursor: pointer; transition: all 0.15s; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem; border-radius: 10px; padding: 0.62rem 1.15rem; border: 1px solid var(--gold); background: var(--gold); color: #0f1220; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: var(--gold-hi); border-color: var(--gold-hi); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn.ghost { background: transparent; color: var(--gold); }
@@ -121,7 +121,7 @@ label.fld { display: block; font-family: var(--font-mono); font-size: 0.68rem; l
 .pill.ghosty { color: var(--muted); border: 1px dashed var(--line-2); }
 
 /* avatar */
-.avatar { border-radius: 50%; display: grid; place-items: center; font-weight: 700; color: #0d1014; flex: none; }
+.avatar { border-radius: 50%; display: grid; place-items: center; font-weight: 700; color: #0f1220; flex: none; }
 
 /* stat tiles */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.9rem; }

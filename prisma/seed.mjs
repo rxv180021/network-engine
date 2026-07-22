@@ -12,7 +12,7 @@ function hashPassword(password) {
   return `${salt}:${hash}`;
 }
 const PW = hashPassword("demo1234");
-const COLORS = ["#E3B25A", "#7CA9E6", "#A97CE6", "#5CC08C", "#E67C9E", "#D9C86A", "#6AD9D2", "#E6A97C"];
+const COLORS = ["#8B7CF6", "#7CA9E6", "#A97CE6", "#5CC08C", "#E67C9E", "#6AD9D2", "#E8836B", "#7DD6A8"];
 
 const ORG = "Women in AI";
 
